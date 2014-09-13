@@ -5,8 +5,7 @@ ini_set("display_errors", 1);
 require_once("AuthorizeSpreadsheet.php");
 $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 
-// pick up posted variables
-$spreadsheetID = $_POST['spreadsheetID'];
+// pick up posted Title
 $spreadsheetTitle = $_POST['spreadsheetTitle'];
 echo "<H3>$spreadsheetTitle</H3>";
 // Pick up spreadheet and then get worksheets
@@ -29,8 +28,6 @@ foreach ($worksheetFeed as $w){
               <TD>" . date_format($w->getUpdated(), "m-d-Y") , "</TD>
               <TD ALIGN=RIGHT>" . count($rows) . "</TD>
               <TD><FORM METHOD=POST ACTION=DumpWorksheet.php>
-                  <INPUT TYPE=HIDDEN NAME=spreadsheetID VALUE=
-                      '$spreadsheetID'>                      
                   <INPUT TYPE=HIDDEN NAME=worksheetTitle VALUE='" .
                       $w->getTitle() . "'>                      
                   <INPUT TYPE=HIDDEN NAME=spreadsheetTitle VALUE='" .

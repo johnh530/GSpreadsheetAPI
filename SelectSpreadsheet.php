@@ -20,8 +20,6 @@ foreach ($spreadsheetFeed as $s){
               <TD>" . date_format($s->getUpdated(), "m-d-Y") , "</TD>
               <TD ALIGN=RIGHT>" . $w->count() . "</TD>
               <TD><FORM METHOD=POST ACTION=SelectWorksheet.php>
-                  <INPUT TYPE=HIDDEN NAME=spreadsheetID VALUE='" .
-                      $s->getID() . "'>                      
                   <INPUT TYPE=HIDDEN NAME=spreadsheetTitle VALUE='" .
                       $s->getTitle() . "'>
                   <INPUT TYPE=SUBMIT VALUE=\"Select\">

@@ -10,12 +10,13 @@ $spreadsheetTitle = $_POST['spreadsheetTitle'];
 $worksheetTitle = $_POST['worksheetTitle'];
 echo "<H3>$spreadsheetTitle - $worksheetTitle</H3>";
 // Pick up spreadheet and then get worksheets
-//$s = $spreadsheetFeed->getByID($spreadhseetID);
 $s = $spreadsheetFeed->getByTitle($spreadsheetTitle);
 $worksheetFeed = $s->getWorksheets();
 $w  = $worksheetFeed->getByTitle($worksheetTitle);
 $listFeed = $w->getListFeed();
 foreach($listFeed->getEntries() as $entry) {
+    echo "<HR>";
     var_dump($entry->getValues());
 }
+echo "<HR>";
 ?>
