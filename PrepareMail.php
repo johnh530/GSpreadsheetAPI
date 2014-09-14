@@ -8,6 +8,7 @@ function pretty($var){
     }
     return $var;
 }
+
 // for debugging
 ini_set("display_errors", 1);
 // Authenticate and pick up Calendar object
@@ -17,8 +18,13 @@ $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 // pick up posted variables
 $spreadsheetTitle = $_POST['spreadsheetTitle'];
 $worksheetTitle = $_POST['worksheetTitle'];
+
 echo "<H3>$spreadsheetTitle - $worksheetTitle</H3>";
 ?>
+<!-- Form for sending email - passes Subject, CC, Message
+     In session variable is $Mail which is an associative array with key
+     of email address and value of table of students grades
+-->
 <HR>
 <FORM method=POST action=SendMail.php>
   <TABLE>
@@ -28,8 +34,8 @@ echo "<H3>$spreadsheetTitle - $worksheetTitle</H3>";
     <TR><TH align=left>From</TH>
         <TD><input type=text name=From value="no-reply@wheaton.edu"> </TD></TR>
     <TR><TH align=left>CC</TH><TD><INPUT type=text name=CC><TD></TR>
-    <TR><th>Message</th>
-    <TD><TEXTAREA name=message rows=4 cols=60> Here are your grades
+    <TR><TH>Message</TH>
+    <TD><TEXTAREA name=Message rows=4 cols=60> Here are your grades
           </TEXTAREA></TD></TR>
     <TR><TD colspan=2 align=left><INPUT type=SUBMIT value="Send E-mail"></TD>
     </TR>
@@ -37,12 +43,15 @@ echo "<H3>$spreadsheetTitle - $worksheetTitle</H3>";
 </FORM>
 <H4>Check informatoin below before submitting</H4>
 <?php
+
 // Pick up spreadheet and then get worksheets
 $s = $spreadsheetFeed->getByTitle($spreadsheetTitle);
 $worksheetFeed = $s->getWorksheets();
 $w  = $worksheetFeed->getByTitle($worksheetTitle);
+
 // two pass - first pass obtain non student info - second pass student data
 $listFeed = $w->getListFeed();
+
 // before and after are values which go to all students
 // before is before student rows, after is after student rows
 $before = array();
@@ -57,6 +66,8 @@ foreach($listFeed->getEntries() as $entry) {
     if ($beforeStudent) $before[] = $Values;
     else $after[] = $Values;
 }
+
+//Mail is array indexed by email and value is table of grades
 $Mail = array();
 // second pass - get data to mail and report
 foreach($listFeed->getEntries() as $entry) {
@@ -75,7 +86,7 @@ foreach($listFeed->getEntries() as $entry) {
 	     foreach($after as $footer)
 	          $Str .= "<TH align=right>" . pretty($footer[$Key]) . "</TH>";
              $Str .= "</TR>";
-	 } else {
+	 } else { // same as first except no TABLE and TH replaced by TR
              $Str .= "<TR><TD align-left>$Key</TD>";
 	     foreach($before as $header)
 	          $Str .= "<TD align=right>" . pretty($header[$Key]) . "</TD>";
@@ -86,8 +97,8 @@ foreach($listFeed->getEntries() as $entry) {
          }
     }
     $Str .= "</TABLE>";
-    echo "<HR>$Str<HR>";
-    $Mail[$Values['email']] = $Str;
+    echo "<HR>$Str<HR>"; // show on web page
+    $Mail[$Values['email']] = $Str; // save for session variable
 }
 $_SESSION['Mail'] = $Mail;
 ?>
