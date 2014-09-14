@@ -27,7 +27,7 @@ foreach ($worksheetFeed as $w){
     echo "<TR><TD>" . $w->getTitle() . "</TD>
               <TD>" . date_format($w->getUpdated(), "m-d-Y") , "</TD>
               <TD ALIGN=RIGHT>" . count($rows) . "</TD>
-              <TD><FORM METHOD=POST ACTION=DumpWorksheet.php>
+              <TD><FORM METHOD=POST ACTION=PrepareMail.php>
                   <INPUT TYPE=HIDDEN NAME=worksheetTitle VALUE='" .
                       $w->getTitle() . "'>                      
                   <INPUT TYPE=HIDDEN NAME=spreadsheetTitle VALUE='" .
