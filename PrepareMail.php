@@ -1,6 +1,9 @@
 <?php
 // clean up numbers to 1 place past decimal
 function pretty($var){
+    if ($var === ""){
+         return "&nbsp;";
+    }
     if (is_numeric($var)){
         $num = $var + 0;
         if (is_int($num)) return $var;
@@ -52,6 +55,10 @@ $w  = $worksheetFeed->getByTitle($worksheetTitle);
 // two pass - first pass obtain non student info - second pass student data
 $listFeed = $w->getListFeed();
 
+// example of cellFeed
+$cellFeed = $w->getCellFeed();
+var_dump($cellFeed->getCell(1,1)->getContent());
+
 // before and after are values which go to all students
 // before is before student rows, after is after student rows
 $before = array();
@@ -79,15 +86,15 @@ foreach($listFeed->getEntries() as $entry) {
         if ($First){
              $First = false;
              $Str = "<TABLE cellpadding=2>";
-             $Str .= "<TR><TH align-left>$Key</TH>";
+             $Str .= "<TR><TH align-left>" . pretty($Key). "</TH>";
 	     foreach($before as $header)
 	          $Str .= "<TH align=right>" . pretty($header[$Key]) . "</TH>";
-	     $Str .= "<TH align=right>$Value</TH>";
+	     $Str .= "<TH align=right>" . pretty($Value) . "</TH>";
 	     foreach($after as $footer)
 	          $Str .= "<TH align=right>" . pretty($footer[$Key]) . "</TH>";
              $Str .= "</TR>";
 	 } else { // same as first except no TABLE and TH replaced by TR
-             $Str .= "<TR><TD align-left>$Key</TD>";
+             $Str .= "<TR><TD align-left>" . pretty($Key) . "</TD>";
 	     foreach($before as $header)
 	          $Str .= "<TD align=right>" . pretty($header[$Key]) . "</TD>";
 	     $Str .= "<TD align=right>" . pretty($Value) . "</TD>";
